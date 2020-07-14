@@ -7,7 +7,7 @@
     "serve": "sirv public"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "del-cli": "^3.0.0",
     "prettier": "^2.0.4",
