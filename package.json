@@ -13,7 +13,7 @@
     "prettier": "^2.0.4",
     "prettier-plugin-svelte": "^1.1.0",
     "rollup": "^2.6.1",
-    "rollup-plugin-html2": "^1.1.0",
+    "rollup-plugin-html2": "^2.0.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-svelte": "^5.0.3",
