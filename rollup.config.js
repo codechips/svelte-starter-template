@@ -7,47 +7,64 @@ import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import preprocess from 'svelte-preprocess';
+import { transformSync } from '@swc/core';
 
 const isDev = process.env.NODE_ENV === 'development';
+const buildDir = 'dist';
+const port = 3000;
 
 const plugins = [
   svelte({
     dev: isDev,
     extensions: ['.svelte'],
-    preprocess: preprocess(),
+    // extract all styles to an external file
+    css: css => {
+      css.write(`${buildDir}/bundle.css`);
+    },
+    preprocess: preprocess({
+      typescript({ content }) {
+        // use SWC to transpile TS scripts in Svelte files
+        const { code } = transformSync(content, {
+          jsc: {
+            parser: { syntax: 'typescript' }
+          }
+        });
+        return { code };
+      }
+    })
   }),
-  typescript(),
+  typescript({ sourceMap: isDev }),
   resolve({
     browser: true,
-    dedupe: ['svelte'],
+    dedupe: ['svelte']
   }),
   commonjs(),
   html({
     template: 'src/index.html',
-    fileName: 'index.html',
-  }),
+    fileName: 'index.html'
+  })
 ];
 
 if (isDev) {
   plugins.push(
     serve({
-      contentBase: './dist',
+      contentBase: buildDir,
       historyApiFallback: true,
-      port: 3000,
+      port
     }),
-    livereload({ watch: './dist' })
+    livereload({ watch: buildDir })
   );
 } else {
-  plugins.push(terser({ sourcemap: isDev }));
+  plugins.push(terser());
 }
 
 module.exports = {
   input: 'src/main.ts',
   output: {
     name: 'bundle',
-    file: 'dist/bundle.js',
+    file: `${buildDir}/bundle.js`,
     sourcemap: isDev,
-    format: 'iife',
+    format: 'iife'
   },
-  plugins,
+  plugins
 };
