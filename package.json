@@ -6,6 +6,7 @@
     "clean": "rimraf dist",
     "check": "svelte-check",
     "build": "run-s clean check compile",
+    "format": "prettier --write src",
     "compile": "cross-env NODE_ENV=production rollup --config",
     "watch:check": "svelte-check --watch",
     "watch:build": "cross-env NODE_ENV=development rollup --config --watch"
